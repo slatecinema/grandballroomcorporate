@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Static Image Reveal Slider</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  .slider {
+    position: relative;
+    width: 960px; /* Adjust based on your desired aspect ratio */
+    height: 640px; /* 3:2 aspect ratio */
+    overflow: hidden;
+  }
+  .slider img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+  }
+  .reveal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://www.dropbox.com/scl/fi/4jf4m7fy05gfkvxl73t5j/SHGB-2-Compressed.jpg?rlkey=rqiotihg24zlwsw0k6aj1q4sn&dl=1') no-repeat center / cover;
+    clip-path: polygon(0 0, 0% 0, 0% 100%, 0 100%);
+  }
+  .slider-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 6px; /* Increased thickness */
+    background-color: #fff; /* White color */
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="slider" id="slider">
+  <img src="https://www.dropbox.com/scl/fi/2je7z0p0wytb8xf6lfzom/2b-Grand-Ballroom-Corporate-Compressed.jpg?rlkey=af9g0kyro0slec59gb3lmvo8b&dl=1" alt="First Image">
+  <div class="reveal"></div>
+  <div class="slider-bar" id="sliderBar"></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.getElementById('slider');
+    const reveal = slider.querySelector('.reveal');
+    const sliderBar = document.getElementById('sliderBar');
+
+    slider.addEventListener('mousemove', function(e) {
+      const rect = slider.getBoundingClientRect();
+      const x = e.clientX - rect.left; // x position within the element.
+      const widthPercent = (x / rect.width) * 100;
+      reveal.style.clipPath = `polygon(0 0, ${widthPercent}% 0, ${widthPercent}% 100%, 0 100%)`;
+      sliderBar.style.left = `${x}px`;
+    });
+
+    slider.addEventListener('touchmove', function(e) {
+      const rect = slider.getBoundingClientRect();
+      const touchX = e.touches[0].clientX - rect.left; // Touch position within the element.
+      const widthPercent = (touchX / rect.width) * 100;
+      reveal.style.clipPath = `polygon(0 0, ${widthPercent}% 0, ${widthPercent}% 100%, 0 100%)`;
+      sliderBar.style.left = `${touchX}px`;
+      e.preventDefault(); // Prevent scrolling when touching the slider.
+    }, { passive: false });
+  });
+</script>
+
+</body>
+</html>
